@@ -62,7 +62,21 @@
       <div class="post-content" v-if="selectedPost">
         <h2>{{ selectedPost.title }}</h2>
         <p>{{ selectedPost.content }}</p>
-        <button @click="closePost">닫기</button>
+        <button @click="deletePost(selectedPost.no)">!! 게시글 삭제 !!</button>
+        <br />
+        <button @click="closePost(selectedPost)">닫기</button>
+      </div>
+
+      <button @click="writePost">게시글 쓰기</button>
+
+      <div v-if="isAddingPost">
+        <label for="title">제목 : </label>
+        <input type="text" id="title" v-model="post.title" />
+        <br />
+        <label for="title">내용 : </label>
+        <input type="text" id="content" v-model="post.content" />
+        <br />
+        <button @click="makePost(post)">게시글 작성</button>
       </div>
     </div>
 
@@ -73,6 +87,7 @@
       createApp({
         setup() {
           // 게시글 목록
+          const post = ref({});
           const posts = ref([
             {
               no: 1,
@@ -139,6 +154,8 @@
           // 선택한 게시글 초기화
           const selectedPost = ref(null);
 
+          const isAddingPost = ref(false);
+
           // 게시글 선택 함수 (클릭 시 실행)
           const selectPost = (post) => {
             // 클릭 시 선택한 게시글을 설정하는 코드를 작성하세요
@@ -151,11 +168,28 @@
             selectedPost.value = null;
           };
 
+          const writePost = () => {
+            isAddingPost.value = !isAddingPost.value;
+          };
+
+          const makePost = (post) => {
+            posts.value.push({ no: posts.value.length + 1, ...post });
+          };
+
+          const deletePost = (no) => {
+            closePost();
+            posts.value.splice(no - 1, 1);
+          };
           return {
+            post,
             posts,
+            isAddingPost,
             selectedPost,
             selectPost,
             closePost,
+            writePost,
+            makePost,
+            deletePost,
           };
         },
       }).mount('#app');
