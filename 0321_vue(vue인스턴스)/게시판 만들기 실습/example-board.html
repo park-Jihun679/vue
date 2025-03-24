@@ -37,20 +37,39 @@
         cursor: pointer;
         border-radius: 3px;
       }
+      .sort-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+      }
       button:hover {
         background: #ff4f4f;
+      }
+      .search-container {
+        display: flex;
+        justify-content: center;
       }
     </style>
   </head>
   <body>
     <div id="app">
       <h1>📌 게시판 목록</h1>
-
+      <div class="search-container">
+        <input
+          type="text"
+          placeholder="검색어를 입력하세요"
+          v-model="selectQuery"
+        />
+      </div>
+      <div class="sort-buttons">
+        <button @click="sortPosts('asc')">오름차순</button>
+        <button @click="sortPosts('desc')">내림차순</button>
+      </div>
       <!-- 여기에 게시글 목록을 표시하는 코드를 작성하세요 -->
       <ul>
         <li
           class="post-item"
-          v-for="post in posts"
+          v-for="post in filteredPosts"
           :key="post.no"
           @click="selectPost(post)"
         >
@@ -82,7 +101,7 @@
 
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
-      const { createApp, ref } = Vue;
+      const { createApp, ref, computed } = Vue;
 
       createApp({
         setup() {
@@ -149,6 +168,13 @@
               content:
                 'Git은 버전 관리 시스템이며, GitHub는 이를 활용한 원격 저장소 플랫폼입니다.',
             },
+            ...Array.from({ length: 3000 }, (_, i) => ({
+              no: i + 11,
+              title: `게시글 제목 ${i + 11}`,
+              content: `게시글 ${
+                i + 11
+              }의 내용입니다. 이 글은 자동으로 생성된 내용입니다.`,
+            })),
           ]);
 
           // 선택한 게시글 초기화
@@ -180,16 +206,50 @@
             closePost();
             posts.value.splice(no - 1, 1);
           };
+
+          const sortPosts = (order) => {
+            if (order === 'asc') {
+              console.log('오름차순');
+              posts.value.sort((a, b) => a.no - b.no);
+            } else {
+              console.log('내림차순');
+              posts.value.sort((a, b) => b.no - a.no);
+            }
+          };
+
+          // 검색기능
+          const selectQuery = ref('');
+          const query = selectQuery.value.toLowerCase();
+
+          const filteredPosts = computed(() => {
+            // 검색어가 없을 때는 전체 게시글
+            if (!selectQuery.value) {
+              return posts.value;
+
+              // filter :
+              // 배열의 각 요소에 대해 주어진 조건을 만족하는 요소만 모아 새 배열 반환
+            } else {
+              return posts.value.filter(
+                (post) =>
+                  post.title.toLowerCase().includes(query) ||
+                  post.content.toLowerCase().includes(query)
+              );
+            }
+          });
+
           return {
             post,
             posts,
             isAddingPost,
             selectedPost,
+            selectQuery,
+            filteredPosts,
             selectPost,
             closePost,
             writePost,
             makePost,
             deletePost,
+            sortPosts,
           };
         },
       }).mount('#app');
