@@ -4,25 +4,40 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>파일명</title>
+    <style>
+      .inputBox {
+        background-color: cornflowerblue;
+      }
+    </style>
   </head>
   <body>
     <div id="app">
       <div>
         <p>1부터 100까지만 입력 가능합니다.</p>
-        점수 : <input type="text" v-model.number="num" />
+        점수 : <input type="text" :class="overStyle" v-model.number="num" />
       </div>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script type="text/javascript">
-      const { createApp, ref } = Vue;
+      const { createApp, ref, computed } = Vue;
 
       const app = createApp({
         setup() {
           const num = ref(0);
-          
+
+          const overStyle = computed(() => {
+            let styleList = [];
+            if (num.value < 0 || num.value > 100) {
+              styleList.push('inputBox');
+            }
+            console.log(styleList);
+
+            return styleList;
+          });
 
           return {
             num,
+            overStyle,
           };
         },
       });
