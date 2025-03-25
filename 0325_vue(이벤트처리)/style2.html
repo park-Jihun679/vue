@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>파일명</title>
+  </head>
+  <body>
+    <div id="app">
+      <button
+        @mouseenter="changeStyle"
+        @mouseleave="resetStyle"
+        :style="style1"
+      >
+        테스트
+      </button>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="text/javascript">
+      const { createApp, ref } = Vue;
+
+      const app = createApp({
+        setup() {
+          const style1 = ref({
+            backgroundColor: 'aqua',
+            color: 'black',
+          });
+
+          const enterBackgroundColor = ref('purple');
+          const enterColor = ref('yellow');
+
+          const leaveBackgroundColor = ref('aqua');
+          const leaveColor = ref('black');
+
+          const changeStyle = () => {
+            style1.value.backgroundColor = enterBackgroundColor.value;
+            style1.value.color = enterColor.value;
+          };
+
+          const resetStyle = () => {
+            style1.value.backgroundColor = leaveBackgroundColor.value;
+            style1.value.color = leaveColor.value;
+          };
+
+          return {
+            style1,
+            enterBackgroundColor,
+            enterColor,
+            leaveBackgroundColor,
+            leaveColor,
+            changeStyle,
+            resetStyle,
+          };
+        },
+      });
+
+      app.mount('#app');
+    </script>
+  </body>
+</html>
