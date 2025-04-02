@@ -1,11 +1,12 @@
 <script setup>
 import NoSlotTest from './components/NoSlotTest.vue';
+import SlotTest from './components/SlotTest.vue';
 </script>
 
 <template>
-  <div>
-    <NoSlotTest />
-  </div>
+  <NoSlotTest />
+  <br />
+  <SlotTest />
 </template>
 
 <style scoped></style>

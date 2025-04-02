@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import CheckBox1 from './CheckBox1.vue';
+import CheckBox2 from './CheckBox2.vue';
 
 const items = ref([
   { id: 'V', checked: true, label: 'Vue' },
@@ -18,15 +18,21 @@ const CheckBoxChanged = (e) => {
 <template>
   <div>
     <h3>당신이 경험한 프론트 엔드 기술은?(첫번째:Slot사용(X))</h3>
-    <CheckBox1
+    <CheckBox2
       v-for="item in items"
       :key="item.id"
       :id="item.id"
-      :label="item.label"
       :checked="item.checked"
       @check-changed="CheckBoxChanged"
     >
-    </CheckBox1>
+      <span
+        v-if="item.checked === true"
+        style="color: blue; text-decoration: underline"
+      >
+        <i>{{ item.label }}</i>
+      </span>
+      <span v-else style="color: gray">{{ item.label }}</span>
+    </CheckBox2>
   </div>
 </template>
 
