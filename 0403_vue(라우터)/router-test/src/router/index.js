@@ -14,8 +14,33 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', component: () => import('@/pages/Home.vue') },
-    { path: '/about', component: () => import('@/pages/About.vue') },
-    { path: '/members', component: () => import('@/pages/Members.vue') },
+    {
+      path: '/about',
+      component: () => import('@/pages/About.vue'),
+      children: [
+        // 기본설정
+        {
+          path: '',
+          redirect: '/about/class',
+        },
+        {
+          path: 'class',
+          name: 'class',
+          component: () => import('@/pages/about/Class.vue'),
+        },
+        {
+          path: 'goal',
+          name: 'goal',
+          component: () => import('@/pages/about/Goal.vue'),
+        },
+      ],
+    },
+    // 중접 라우트
+    // -> 라우트 내부에 라우트를 추가하는 방식
+    {
+      path: '/members',
+      component: () => import('@/pages/Members.vue'),
+    },
     // 동적 라우트 파라미터 처리
     { path: '/members/:id', component: () => import('@/pages/MemberInfo.vue') },
     { path: '/videos', component: () => import('@/pages/Videos.vue') },
